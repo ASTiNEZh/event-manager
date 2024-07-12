@@ -1,0 +1,79 @@
+openapi: "3.0.3"
+info:
+  title: event-manager
+  contact:
+    name: ASTiNEZh
+    url: https://t.me/ASTiNEZh
+    email: astinezh@gmail.com
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080
+    description: локальный сервер для разработки
+paths:
+  /event/new:
+    post:
+      tags:
+        - crud
+      summary: создать ивент
+      description:  Пользователь создаёт новый ивент и он сохраняется в базе
+      operationId: createEvent
+      requestBody:
+        $ref: '#/components/requestBodies/Create'
+      responses:
+        '200':
+          $ref: '#/components/responses/Response'
+        '400':
+          $ref: '#/components/responses/Response'
+        '500':
+          $ref: '#/components/responses/Response'
+        'default':
+          $ref: '#/components/responses/Response'
+components:
+  requestBodies:
+    Create:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Event'
+  responses:
+    Response:
+      description: Условия успешного ответа не удовлетворяются
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Response'
+  schemas:
+    Event:
+      type: object
+      properties:
+        title:
+          type: string
+          description: название
+        startDateTime:
+          type: string
+          format: date-time
+          description: время и дата начала
+        finishDateTime:
+          type: string
+          format: date-time
+          description: время и дата конца
+        eventOwner:
+          type: string
+          format: uuid
+          description: у кого запланирован
+        eventCustomer:
+          type: string
+          format: uuid
+          description: кто запланировал
+        groupEvent:
+          type: array
+          items:
+            type: string
+            description: из какой группы (могут быть кастомными)
+    Response:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
